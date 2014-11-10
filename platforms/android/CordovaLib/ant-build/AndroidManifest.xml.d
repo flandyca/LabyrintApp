@@ -1,2 +1,2 @@
-/home/andreas/Labyrint/platforms/android/CordovaLib/ant-build/AndroidManifest.xml : \
-/home/andreas/Labyrint/platforms/android/CordovaLib/AndroidManifest.xml \
+C:\Users\Marko\git\LabyrintApp\platforms\android\CordovaLib\ant-build\AndroidManifest.xml : \
+C:\Users\Marko\git\LabyrintApp\platforms\android\CordovaLib\AndroidManifest.xml \
