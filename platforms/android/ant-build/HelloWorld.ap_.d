@@ -25,6 +25,7 @@ C:\Users\Marko\git\LabyrintApp\platforms\android\ant-build\res\drawable-port-xhd
 C:\Users\Marko\git\LabyrintApp\platforms\android\ant-build\res\drawable-xxhdpi\icon.png \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\_where-is-www.txt \
+C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\accelero.html \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\cordova.js \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\cordova_plugins.js \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\css \
@@ -33,12 +34,17 @@ C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\icon.png \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\img \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\index.html \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\js \
+C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\plugins \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\res \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\spec \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\spec.html \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\css\index.css \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\img\logo.png \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\js\index.js \
+C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\plugins\org.apache.cordova.device-motion \
+C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\plugins\org.apache.cordova.device-motion\www \
+C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\plugins\org.apache.cordova.device-motion\www\Acceleration.js \
+C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\plugins\org.apache.cordova.device-motion\www\accelerometer.js \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\res\icon \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\res\screen \
 C:\Users\Marko\git\LabyrintApp\platforms\android\assets\www\res\icon\android \
