@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Settings</title>
+
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+
+    // The watch id references the current `watchAcceleration`
+    var watchID = null;
+
+    // Wait for Cordova to load
+    //
+    document.addEventListener("deviceready", onDeviceReady, false);
+  </head>
+  <body>
+  	<table id="table">
+	  	<tr id="row">
+	  		<td>
+				<button onclick="small.html;" id="smallButton" class="float-left submit-button" >Small</button>
+			</td>
+			<td>
+				<button onclick="medium.html;" id="mediumButton" class="float-left submit-button" >Medium</button>
+			</td>
+			<td>
+				<button onclick="large.html;" id="largeButton" class="float-left submit-button" >Large</button>
+			</td>
+		</tr>
+	</table>
+	<table>
+	  	<tr id="row">
+	  		<td>	
+				<button onclick="normal.html;" id="normalButton" class="float-left submit-button" >Normal</button>
+			</td>
+			<td>
+				<button onclick="tail.html;" id="tailButton" class="float-left submit-button" >Tail</button>
+			</td>	
+		<tr>	
+		</tr>	
+			<td>	
+				<button onclick="glow.html;" id="glowButton" class="float-left submit-button" >Glow</button>
+			</td>
+			<td>	
+				<button onclick="dark.html;" id="darkButton" class="float-left submit-button" >Dark</button>
+			</td>
+		</tr>	
+	</table>
+  </body>
+</html>
