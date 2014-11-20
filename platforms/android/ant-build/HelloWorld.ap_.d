@@ -60,6 +60,7 @@ E:\DEV\LabyrintApp\platforms\android\assets\www\jQuery\jquery.mobile.structure-1
 E:\DEV\LabyrintApp\platforms\android\assets\www\jQuery\jquery.mobile.structure-1.4.5.min.css \
 E:\DEV\LabyrintApp\platforms\android\assets\www\jQuery\jquery.mobile.theme-1.4.5.css \
 E:\DEV\LabyrintApp\platforms\android\assets\www\jQuery\jquery.mobile.theme-1.4.5.min.css \
+E:\DEV\LabyrintApp\platforms\android\assets\www\jQuery\velocity.min.js \
 E:\DEV\LabyrintApp\platforms\android\assets\www\jQuery\demos\backbone-requirejs \
 E:\DEV\LabyrintApp\platforms\android\assets\www\jQuery\demos\body-bar-classes \
 E:\DEV\LabyrintApp\platforms\android\assets\www\jQuery\demos\button \
