@@ -39,6 +39,9 @@
 		//Acceleration definitions
 		var accX = 0;
 		var accY = 0;
+		
+		//Maxspeed definitions
+		var maxspeed = 7;
 	
 	
     // The watch id references the current `watchAcceleration`
@@ -93,23 +96,31 @@
 		
 		//MOVE TO RIGHT, accX is POSITIVE
 		if(accX > 1){
-			if(speedX <= 5){
+			if(speedX <= 6){
 				if(speedX <= 0){
 					speedX += 1;
 				}
 				else{
 					speedX += 0.5;
 				}
-			}
+				//Check IF speed is higher than tilt angle
+				if(speedX >= accX){
+				speedX = accX;
+				}
+			}			
 		}
 		//MOVE TO LEFT, accX is NEGATIVE
 		else if(accX < -1){
-			if(speedX >= -5){
+			if(speedX >= -6){
 				if(speedX >= 0){
 					speedX += -1;
 				}
 				else{
 					speedX += -0.5;
+				}
+				//Check IF speed is higher than tilt angle
+				if(speedX <= accX){
+				speedX = accX;
 				}
 			}
 		}
@@ -124,23 +135,31 @@
 		}
 		//MOVE DOWNWARDS, accY is POSITIVE
 		if(accY > 1){
-			if(speedY <= 5){
+			if(speedY <= 6){
 				if(speedY <= 0){
 					speedY += 1;
 				}
 				else{
 					speedY += 0.5;
 				}
+				//Check IF speed is higher than tilt angle
+				if(speedY >= accY){
+				speedY = accY;
+				}
 			}
 		}
 		//MOVE UPWARDS, accY is NEGATIVE
 		else if(accY < -1){
-			if(speedY >= -5){
+			if(speedY >= -6){
 				if(speedY >= 0){
 					speedY += -1;
 				}
 				else{
 					speedY += -0.5;
+				}
+				//Check IF speed is higher than tilt angle
+				if(speedY <= accY){
+				speedY = accY;
 				}
 			}
 		}
@@ -158,15 +177,15 @@
 		checkCollision();		
 		//MOVE BALL
 		ball.velocity({top:"+="+speedY, left:"+="+speedX}, {duration: 0.1});
-		
-
     }
 	
 	
 	function checkCollision(){
 		
+		//SCREEN collision		
 		//Check LEFT collision
 		if(ballLeft <= boundaryLeft && accX <= 0){
+			//Check IF speed is high enough to go through boundary
 			if((ballLeft + speedX) < boundaryLeft){
 				speedX = ballLeft * -1;
 			}
@@ -176,6 +195,7 @@
 		}
 		//Check RIGHT collision
 		else if(ballRight >= boundaryRight  && accX >= 0){
+			//Check IF speed is high enough to go through boundary
 			if((ballRight + speedX) > boundaryRight){
 				speedX = boundaryRight - ballRight;
 			}
@@ -185,6 +205,7 @@
 		}
 		//Check TOP collision
 		if(ballTop <= boundaryTop && accY <= 0){
+			//Check IF speed is high enough to go through boundary
 			if((ballTop + speedY) < boundaryTop){
 				speedY = ballTop * -1;
 			}
@@ -194,6 +215,7 @@
 		}
 		//Check BOTTOM collision
 		else if(ballBottom >= boundaryBottom && accY >= 0){
+			//Check IF speed is high enough to go through boundary
 			if((ballBottom + speedY) > boundaryBottom){
 				speedY = boundaryBottom - ballBottom;
 			}
@@ -228,6 +250,10 @@
 	//OLD ENGINE
 	/*
         var element = document.getElementById('accelerometer');	
+		element.innerHTML = 'Acceleration X: ' + ballBottom + '<br />' +
+                            'Acceleration Y: ' + boundaryBottom + '<br />' +
+                            'Coordinate top: ' + ballPosition.top + '<br />' +
+                            'Coordinate left: ' + ballPosition.left + '<br />';
      	
         var ball = $("#ball");
         var wall = $("#wall");
@@ -283,10 +309,5 @@
        			$("#ball").velocity({left:"+="+maxspeed},animationspeed);
        		}
        	}
-    	
-       	element.innerHTML = 'Acceleration X: ' + ballBottom + '<br />' +
-                            'Acceleration Y: ' + boundaryBottom + '<br />' +
-                            'Coordinate top: ' + ballPosition.top + '<br />' +
-                            'Coordinate left: ' + ballPosition.left + '<br />';
         
     */

@@ -29,6 +29,7 @@ Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\cordova.js \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\cordova_plugins.js \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\css \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\game.html \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\gameTemp.html \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\icon.png \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\img \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\index.html \
