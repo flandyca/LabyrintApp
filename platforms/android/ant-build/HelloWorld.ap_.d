@@ -35,9 +35,11 @@ Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\img \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\index.html \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\js \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\maze.html \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\plugins \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\res \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\settings.html \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\small.jpg \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\spec \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\spec.html \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\css\index.css \
@@ -784,7 +786,9 @@ Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\images\icons
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\images\icons-svg\user-white.svg \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\images\icons-svg\video-black.svg \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\images\icons-svg\video-white.svg \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\js\engine.js \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\js\index.js \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\js\maze.js \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\plugins\org.apache.cordova.device-motion \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\plugins\org.apache.cordova.device-motion\www \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\plugins\org.apache.cordova.device-motion\www\Acceleration.js \
