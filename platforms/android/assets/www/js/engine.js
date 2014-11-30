@@ -273,6 +273,18 @@
 			if (red == 0 && green == 0 && blue == 0){
 				return true;
 			}
+			
+			//Look for Red
+			if (red > 200 && green == 0 && blue == 0){
+				window.alert("Red!");
+				Goal();
+				return;
+			}
+			//Look for Green
+			if (red == 0 && green > 180 && blue == 0){
+				window.alert("green!");
+				return;
+			}
 		}		
 		return false;
 	}
@@ -280,4 +292,10 @@
     //
     function onError() {
         alert('onError!');
+    }
+    
+    //what happens in goal
+    function Goal(){
+    	//just a reload :P
+    	window.location.reload();
     }
