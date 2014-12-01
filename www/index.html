@@ -33,15 +33,18 @@
 		
 		<script src="js/engine.js"></script>
 		<script>
+		//Store the values of the radio buttons into global variables
 		function storeValues() {
 			$('input[name="radioSize"]').change(function(){
 			labyrinthSize = this.value
 			})
+			//Alert to check global variable
 			alert (labyrinthSize);
 			
 			$('input[name="radioMode"]').change(function(){
 			labyrinthMode = this.value
 			})
+			//Alert to check global variable
 			alert (labyrinthMode);
 		};
 		</script>
