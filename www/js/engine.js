@@ -1,5 +1,9 @@
 	//Define global variables
 		
+		//Settings
+		var labyrinthSize = 1;
+		var labyrinthMode = 1;
+		
 		//Maze definitions
 		var canvas;
 		var context;
@@ -38,8 +42,7 @@
 		var accX = 0;
 		var accY = 0;
 		
-		
-	
+
 	
     // The watch id references the current `watchAcceleration`
     var watchID = null;
