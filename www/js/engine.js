@@ -1,8 +1,8 @@
 	//Define global variables
 		
 		//Settings
-		var labyrinthSize = 1;
-		var labyrinthMode = 1;
+		var labyrinthSize = "small";
+		var labyrinthMode = "visible";
 		
 		//Maze definitions
 		var canvas;
