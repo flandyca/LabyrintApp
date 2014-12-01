@@ -271,6 +271,8 @@
 			
 			//Look for black
 			if (red == 0 && green == 0 && blue == 0){
+			//Play SoundCollision when colliding with black pixels
+				SoundCollision();
 				return true;
 			}
 			
@@ -299,3 +301,16 @@
     	//just a reload :P
     	window.location.reload();
     }
+	
+	//Play mp3 file
+	function SoundCollision() {
+	var audio = new Audio('punch.mp3');
+	// punch.mp3 was downloaded from: http://soundbible.com/2069-Realistic-Punch.html made by Mark DiAngelo
+	audio.play();
+	}
+
+	//Testbutton in game.html
+	function buttonClicked()
+	{
+	SoundCollision();
+	}
