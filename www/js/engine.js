@@ -12,22 +12,10 @@
 		//Ball movement definitions
 		var speedX = 0;
 		var speedY = 0;
-		var speedUnit = 0.5;
-		var maxSpeed = 6;
-		
-		/*
-		//Collision definitions
-		var collisionLeft = 0;
-		var collisionRight = 0;
-		var collisionTop = 0;
-		var collisionBottom = 0;
-	
-		//Boundary definitions
-		var boundaryLeft = 0;
-		var boundaryRight = $(window).width();
-		var boundaryTop = 0;
-		var boundaryBottom = $(window).height();
-		*/
+		var speedUnit = 0.2;
+		var maxSpeed = 3;
+		var bounceSensitivity = 0.3;
+		var bounceSpeedDimish = -0.8;
 		
 		//Ball definitions
 		var ball = null;
@@ -37,10 +25,15 @@
 		var ballTop = 0;
 		var ballBottom = 0;
 		var ballRadius = 0;
+		var ballSize = 0;
 		
 		//Acceleration definitions
 		var accX = 0;
 		var accY = 0;
+		
+		//Window size definitions
+		var windowWidth = $(window).width();
+		var windowHeight = $(window).height();
 		
 
 	
@@ -58,6 +51,18 @@
 		canvas = document.getElementById("canvas");
 		context = canvas.getContext("2d");
 		
+		//BALL DEFINITIONS
+		var ballSetup = document.getElementById('ball');
+		var size = "15px";
+		var startLeft = ((windowWidth/2)-(windowHeight/2)) + 10;
+		var startTop = 10;
+		
+		//BALL SETUP
+		ballSetup.style.left = startLeft + 'px';
+		ballSetup.style.Top = startTop + 'px';
+		ballSetup.style.width = size;
+		ballSetup.style.height = size;
+		
 		//Draw the maze background
 		drawMaze(mazeName);
 				
@@ -69,13 +74,11 @@
 		var imgMaze = new Image();
 		imgMaze.onload = function() {
 			//Resize the canvas to match the mace picture
-			imgMaze.width = $(window).width();
-			imgMaze.height = $(window).height();
-			canvas.width = imgMaze.width;
-			canvas.height = imgMaze.height;
+			canvas.width = windowWidth;
+			canvas.height = windowHeight;
 			
 			//Draw the maze
-			context.drawImage(imgMaze, 0,0);		
+			context.drawImage(imgMaze, ((windowWidth/2)-(windowHeight/2)),0, windowHeight, windowHeight);		
 		}
 		imgMaze.src = mazeFile;
 	}
@@ -112,6 +115,7 @@
 		ballTop = ballPosition.top;
 		ballBottom = ballPosition.top + ball.height();
 		ballRadius = ball.height()/2;
+		ballSize = ball.height();
 		
 		//Fetch ACCELERATION values
 		accX = acceleration.y;
@@ -120,23 +124,23 @@
 		//MOVE TO RIGHT, accX is POSITIVE
 		if(accX > 1){
 			if(speedX <= maxSpeed){
-				if(speedX <= 0){
-					speedX += speedUnit*2;
-				}
-				else{
+			//	if(speedX <= 0){
+			//		speedX += speedUnit*2;
+			//	}
+			//	else{
 					speedX += speedUnit;
-				}
+			//	}
 			}			
 		}
 		//MOVE TO LEFT, accX is NEGATIVE
 		else if(accX < -1){
 			if(speedX >= -maxSpeed){
-				if(speedX >= 0){
-					speedX += -speedUnit*2;
-				}
-				else{
+			//	if(speedX >= 0){
+			//		speedX += -speedUnit*2;
+			//	}
+			//	else{
 					speedX += -speedUnit;
-				}
+			//	}
 			}
 		}
 		//SLOW DOWN, accX is NEUTRAL
@@ -151,23 +155,23 @@
 		//MOVE DOWNWARDS, accY is POSITIVE
 		if(accY > 1){
 			if(speedY <= maxSpeed){
-				if(speedY <= 0){
-					speedY += speedUnit*2;
-				}
-				else{
+				//if(speedY <= 0){
+				//	speedY += speedUnit*2;
+				//}
+				//else{
 					speedY += speedUnit;
-				}
+				//}
 			}
 		}
 		//MOVE UPWARDS, accY is NEGATIVE
 		else if(accY < -1){
 			if(speedY >= -maxSpeed){
-				if(speedY >= 0){
-					speedY += -speedUnit*2;
-				}
-				else{
+				//if(speedY >= 0){
+				//	speedY += -speedUnit*2;
+				//}
+				//else{
 					speedY += -speedUnit;
-				}
+				//}
 			}
 		}
 		//SLOW DOWN, accY is NEUTRAL
@@ -187,74 +191,83 @@
     }
 	
 	
-	function checkCollision(){
+	function checkCollision(){		
 		
-		/*
-		//SCREEN collision		
-		//Check LEFT collision
-		if(ballLeft <= boundaryLeft && accX <= 0){
-			//Check IF speed is high enough to go through boundary
-			if((ballLeft + speedX) < boundaryLeft){
-				speedX = ballLeft * -1;
-			}
-			else{
-				speedX = 0;
-			}
-		}
-		//Check RIGHT collision
-		else if(ballRight >= boundaryRight  && accX >= 0){
-			//Check IF speed is high enough to go through boundary
-			if((ballRight + speedX) > boundaryRight){
-				speedX = boundaryRight - ballRight;
-			}
-			else{
-				speedX = 0;
-			}
-		}
-		//Check TOP collision
-		if(ballTop <= boundaryTop && accY <= 0){
-			//Check IF speed is high enough to go through boundary
-			if((ballTop + speedY) < boundaryTop){
-				speedY = ballTop * -1;
-			}
-			else{
-				speedY = 0;
-			}
-		}
-		//Check BOTTOM collision
-		else if(ballBottom >= boundaryBottom && accY >= 0){
-			//Check IF speed is high enough to go through boundary
-			if((ballBottom + speedY) > boundaryBottom){
-				speedY = boundaryBottom - ballBottom;
-			}
-			else{
-				speedY = 0;
-			}
-		}
-		*/
-		//WALL collision
 		//LEFT
 		if(speedX < 0){
-			if(checkColor(ballLeft-speedX, ballTop+ballRadius, speedX, 5)){
-				speedX = speedX * -1;
+			if(checkColor(ballLeft-(speedX*-1), ballTop+(ballRadius/2), (speedX*-1), ballRadius)){
+				if(speedX < (bounceSensitivity*-1)){
+					speedX = speedX * bounceSpeedDimish;
+				}
+				else{
+					speedX = 0;
+				}
 			}
 		}
 		//RIGHT
 		else if(speedX > 0){
-			if(checkColor(ballRight, ballTop+ballRadius, speedX, 5)){
-				speedX = speedX * -1;
+			if(checkColor(ballRight, ballTop+(ballRadius/2), speedX, ballRadius)){
+				if(speedX > bounceSensitivity){
+					speedX = speedX * bounceSpeedDimish;
+				}
+				else{
+					speedX = 0;
+				}
 			}
 		}
 		//TOP
 		if(speedY < 0){
-			if(checkColor(ballLeft+ballRadius, ballTop-speedY, 5, speedY)){
-				speedY = speedY * -1;
+			if(checkColor(ballLeft+(ballRadius/2), ballTop-(speedY*-1), ballRadius, (speedY*-1))){
+				if(speedY < (bounceSensitivity*-1)){
+					speedY = speedY * bounceSpeedDimish;
+				}
+				else{
+					speedY = 0;
+				}
 			}
 		}
 		//BOTTOM
 		else if(speedY > 0){
-			if(checkColor(ballLeft+ballRadius, ballBottom, 5, speedY)){
+			if(checkColor(ballLeft+(ballRadius/2), ballBottom, ballRadius, speedY)){
+				if(speedY > bounceSensitivity){
+					speedY = speedY * bounceSpeedDimish;
+				}
+				else{
+					speedY = 0;
+				}
+			}
+		}	
+		
+		//TOP-LEFT
+		if(speedX <= 0 && speedY <= 0){
+			if(checkColor(ballLeft-(speedX*-1), ballTop-(speedY*-1), (speedX*-1)+(ballRadius/2), (speedY*-1)+(ballRadius/2))){
+				window.alert("TOP-LEFT");
 				speedY = speedY * -1;
+				speedX = speedX * -1;
+			}
+		}
+		//BOTTOM-LEFT
+		else if(speedX <= 0 && speedY >= 0){
+			if(checkColor(ballLeft-(speedX*-1), ballBottom-(ballRadius/2), (speedX*-1)+(ballRadius/2), speedY+(ballRadius/2))){
+				window.alert("BOTTOM-LEFT");
+				speedY = speedY * -1;
+				speedX = speedX * -1;
+			}		
+		}
+		//TOP-RIGHT
+		else if(speedX >= 0 && speedY <= 0){
+			if(checkColor(ballRight-(ballRadius/2), ballTop-(speedY*-1), speedX+(ballRadius/2), (speedY*-1)+(ballRadius/2))){
+				window.alert("TOP-RIGHT");
+				speedY = speedY * -1;
+				speedX = speedX * -1;
+			}
+		}
+		//BOTTOM-RIGHT
+		else if(speedX >= 0 && speedY >= 0){
+			if(checkColor(ballRight-(ballRadius/2), ballBottom-(ballRadius/2), speedX+(ballRadius/2), speedY+(ballRadius/2))){
+				window.alert("BOTTOM-RIGHT");
+				speedY = speedY * -1;
+				speedX = speedX * -1;
 			}
 		}
 		
@@ -313,7 +326,7 @@
 	}
 
 	//Testbutton in game.html
-	/*function buttonClicked()
+	function buttonClicked()
 	{
 	SoundCollision();
-	} */
+	}
