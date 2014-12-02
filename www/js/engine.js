@@ -313,7 +313,7 @@
 	}
 
 	//Testbutton in game.html
-	function buttonClicked()
+	/*function buttonClicked()
 	{
 	SoundCollision();
-	}
+	} */

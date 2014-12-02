@@ -1,5 +1,9 @@
 	//Define global variables
 		
+		//Settings
+		var labyrinthSize = "small";
+		var labyrinthMode = "visible";
+		
 		//Maze definitions
 		var canvas;
 		var context;
@@ -38,8 +42,7 @@
 		var accX = 0;
 		var accY = 0;
 		
-		
-	
+
 	
     // The watch id references the current `watchAcceleration`
     var watchID = null;
@@ -305,11 +308,12 @@
 	//Play mp3 file
 	function SoundCollision() {
 	var audio = new Audio('punch.mp3');
+	// punch.mp3 was downloaded from: http://soundbible.com/2069-Realistic-Punch.html made by Mark DiAngelo
 	audio.play();
 	}
 
 	//Testbutton in game.html
-	function buttonClicked()
+	/*function buttonClicked()
 	{
 	SoundCollision();
-	}
+	} */
