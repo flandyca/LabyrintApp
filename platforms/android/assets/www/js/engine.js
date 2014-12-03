@@ -1,21 +1,25 @@
-	//Define global variables
-		
+	//Define engine.js-global variables
 		//Settings
-		var labyrinthSize = "small";
-		var labyrinthMode = "visible";
+		//var labyrinthSize = "small";
+		//var labyrinthMode = "visible";
+		
+		window.alert("Local storage value for size:"+localStorage.size);
 		
 		//Maze definitions
 		var canvas;
 		var context;
-		var mazeName = "small.jpg";
+		var lsSize = localStorage.size;
+		var lsMode = localStorage.mode;
+		var mazeName = "null";
+		var skinName = "null";
 		
 		//Ball movement definitions
 		var speedX = 0;
 		var speedY = 0;
 		var speedUnit = 0.2;
-		var maxSpeed = 3;
-		var bounceSensitivity = 0.3;
-		var bounceSpeedDimish = -0.8;
+		var maxSpeed = 5;
+		var bounceSensitivity = 0.2;
+		var bounceSpeedDimish = -0.4;
 		
 		//Ball definitions
 		var ball = null;
@@ -33,8 +37,7 @@
 		
 		//Window size definitions
 		var windowWidth = $(window).width();
-		var windowHeight = $(window).height();
-		
+		var windowHeight = $(window).height();		
 
 	
     // The watch id references the current `watchAcceleration`
@@ -44,27 +47,68 @@
     //
     document.addEventListener("deviceready", onDeviceReady, false);
 
+	function randomInt(min,max)	{
+		return Math.floor(Math.random()*(max-min+1)+min);
+	}
+	
+	function pickMaze() {
+	
+		//Pick maze at random
+		if(localStorage.size == "random"){
+			window.alert("Picking random maze");
+			var randomNr = randomInt(1,3);
+		}
+		
+		if(randomNr==1 || lsSize=="small"){
+			mazeName = "small";
+			skinName = "brushed";
+		}
+		else if(randomNr==2 || lsSize=="medium"){
+			mazeName = "medium";
+			skinName = "skulls";			
+		}
+		else if(randomNr==3 || lsSize=="big"){
+			mazeName = "big";
+			skinName = "kitty";
+		}			
+	}
+	
     // Cordova is ready
-    //
+    //	
     function onDeviceReady() {
+		
+		//Load from settings
+		pickMaze();		
+	
 		//Set up the canvas
 		canvas = document.getElementById("canvas");
 		context = canvas.getContext("2d");
 		
+		//SKIN DEFINITIONS
+		var skinSetup = document.getElementById('skin');
+		var skinSize = windowHeight;
+		var skinLeft = (windowWidth/2)-(windowHeight/2);
+		
+		//SKIN SETUP
+		skinSetup.style.left = skinLeft + 'px';
+		skinSetup.style.width = skinSize + 'px';
+		skinSetup.style.height = skinSize + 'px';
+		skinSetup.src = 'skins/'+skinName+'.png';
+		
 		//BALL DEFINITIONS
 		var ballSetup = document.getElementById('ball');
-		var size = "15px";
+		var size = "12";
 		var startLeft = ((windowWidth/2)-(windowHeight/2)) + 10;
 		var startTop = 10;
-		
+				
 		//BALL SETUP
 		ballSetup.style.left = startLeft + 'px';
 		ballSetup.style.Top = startTop + 'px';
-		ballSetup.style.width = size;
-		ballSetup.style.height = size;
+		ballSetup.style.width = size + 'px';
+		ballSetup.style.height = size + 'px';
 		
 		//Draw the maze background
-		drawMaze(mazeName);
+		drawMaze("maps/"+mazeName+".png");
 				
         startWatch();
     }
@@ -124,23 +168,23 @@
 		//MOVE TO RIGHT, accX is POSITIVE
 		if(accX > 1){
 			if(speedX <= maxSpeed){
-			//	if(speedX <= 0){
-			//		speedX += speedUnit*2;
-			//	}
-			//	else{
+				if(speedX <= 0){
+					speedX += speedUnit*2;
+				}
+				else{
 					speedX += speedUnit;
-			//	}
+				}
 			}			
 		}
 		//MOVE TO LEFT, accX is NEGATIVE
 		else if(accX < -1){
 			if(speedX >= -maxSpeed){
-			//	if(speedX >= 0){
-			//		speedX += -speedUnit*2;
-			//	}
-			//	else{
+				if(speedX >= 0){
+					speedX += -speedUnit*2;
+				}
+				else{
 					speedX += -speedUnit;
-			//	}
+				}
 			}
 		}
 		//SLOW DOWN, accX is NEUTRAL
@@ -155,23 +199,23 @@
 		//MOVE DOWNWARDS, accY is POSITIVE
 		if(accY > 1){
 			if(speedY <= maxSpeed){
-				//if(speedY <= 0){
-				//	speedY += speedUnit*2;
-				//}
-				//else{
+				if(speedY <= 0){
+					speedY += speedUnit*2;
+				}
+				else{
 					speedY += speedUnit;
-				//}
+				}
 			}
 		}
 		//MOVE UPWARDS, accY is NEGATIVE
 		else if(accY < -1){
 			if(speedY >= -maxSpeed){
-				//if(speedY >= 0){
-				//	speedY += -speedUnit*2;
-				//}
-				//else{
+				if(speedY >= 0){
+					speedY += -speedUnit*2;
+				}
+				else{
 					speedY += -speedUnit;
-				//}
+				}
 			}
 		}
 		//SLOW DOWN, accY is NEUTRAL
@@ -241,7 +285,7 @@
 		//TOP-LEFT
 		if(speedX <= 0 && speedY <= 0){
 			if(checkColor(ballLeft-(speedX*-1), ballTop-(speedY*-1), (speedX*-1)+(ballRadius/2), (speedY*-1)+(ballRadius/2))){
-				window.alert("TOP-LEFT");
+				//window.alert("TOP-LEFT");
 				speedY = speedY * -1;
 				speedX = speedX * -1;
 			}
@@ -249,7 +293,7 @@
 		//BOTTOM-LEFT
 		else if(speedX <= 0 && speedY >= 0){
 			if(checkColor(ballLeft-(speedX*-1), ballBottom-(ballRadius/2), (speedX*-1)+(ballRadius/2), speedY+(ballRadius/2))){
-				window.alert("BOTTOM-LEFT");
+				//window.alert("BOTTOM-LEFT");
 				speedY = speedY * -1;
 				speedX = speedX * -1;
 			}		
@@ -257,7 +301,7 @@
 		//TOP-RIGHT
 		else if(speedX >= 0 && speedY <= 0){
 			if(checkColor(ballRight-(ballRadius/2), ballTop-(speedY*-1), speedX+(ballRadius/2), (speedY*-1)+(ballRadius/2))){
-				window.alert("TOP-RIGHT");
+				//window.alert("TOP-RIGHT");
 				speedY = speedY * -1;
 				speedX = speedX * -1;
 			}
@@ -265,7 +309,7 @@
 		//BOTTOM-RIGHT
 		else if(speedX >= 0 && speedY >= 0){
 			if(checkColor(ballRight-(ballRadius/2), ballBottom-(ballRadius/2), speedX+(ballRadius/2), speedY+(ballRadius/2))){
-				window.alert("BOTTOM-RIGHT");
+				//window.alert("BOTTOM-RIGHT");
 				speedY = speedY * -1;
 				speedX = speedX * -1;
 			}
@@ -294,13 +338,11 @@
 			
 			//Look for Red
 			if (red > 200 && green == 0 && blue == 0){
-				window.alert("Red!");
 				Goal();
 				return;
 			}
 			//Look for Green
 			if (red == 0 && green > 180 && blue == 0){
-				window.alert("green!");
 				return;
 			}
 		}		
@@ -315,6 +357,7 @@
     //what happens in goal
     function Goal(){
     	//just a reload :P
+		window.alert("You win!");
     	window.location.reload();
     }
 	

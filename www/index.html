@@ -8,9 +8,9 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
 		<!--- jQuery Mobile API added 18.11.2014 -->
-		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
-		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+		<link rel="stylesheet" href="jQuery/jquery.mobile-1.2.0.min.css" />
+		<script src="jQuery/jquery-1.8.2.min.js"></script>
+		<script src="jQuery/jquery.mobile-1.2.0.min.js"></script>
 		<!--- jQuery Mobile / -->
 		<script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
@@ -30,19 +30,20 @@
              }
 
         </script>
-		
 		<script src="js/engine.js"></script>
 		<script>
 		//Store the values of the radio buttons into global variables
 		function storeValues() {
 			$('input[name="radioSize"]').change(function(){
 			labyrinthSize = this.value
+			localStorage.size = this.value
 			})
 			//Alert to check global variable
 			alert (labyrinthSize);
 			
 			$('input[name="radioMode"]').change(function(){
 			labyrinthMode = this.value
+			localStorage.mode = this.value
 			})
 			//Alert to check global variable
 			alert (labyrinthMode);
@@ -84,15 +85,17 @@
 			<fieldset data-role="controlgroup">
 			<legend>Choose labyrinth size:</legend>
 		
+		<input type="radio" name="radioSize" id="radioSize-1" value="random" checked="checked" />
+     	<label for="radioSize-1">Random</label>		
 		
-     	<input type="radio" name="radioSize" id="radioSize-1" value="small" checked="checked" />
-     	<label for="radioSize-1">Small</label>
+     	<input type="radio" name="radioSize" id="radioSize-2" value="small" />
+     	<label for="radioSize-2">Small</label>
 
-     	<input type="radio" name="radioSize" id="radioSize-2" value="medium"  />
-     	<label for="radioSize-2">Medium</label>
+     	<input type="radio" name="radioSize" id="radioSize-3" value="medium"  />
+     	<label for="radioSize-3">Medium</label>
 
-     	<input type="radio" name="radioSize" id="radioSize-3" value="big"  />
-     	<label for="radioSize-3">Big</label>
+     	<input type="radio" name="radioSize" id="radioSize-4" value="big"  />
+     	<label for="radioSize-4">Big</label>
 		
 <!-- 
      	<input type="radio" name="radio-choice" id="radio-choice-4" value="choice-4"  />

@@ -35,11 +35,13 @@ Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\img \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\index.html \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\js \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\maps \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\plugins \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\punch.mp3 \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\punch.ogg \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\res \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\settings.html \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\skins \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\small.jpg \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\spec \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\spec.html \
@@ -48,6 +50,9 @@ Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\img\logo.png \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\demos \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\images \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\jquery-1.11.1.min.js \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\jquery-1.8.2.min.js \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\jquery.mobile-1.2.0.min.css \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\jquery.mobile-1.2.0.min.js \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\jquery.mobile-1.4.5.css \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\jquery.mobile-1.4.5.js \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\jquery.mobile-1.4.5.min.css \
@@ -789,6 +794,9 @@ Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\images\icons
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\jQuery\images\icons-svg\video-white.svg \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\js\engine.js \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\js\index.js \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\maps\big.png \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\maps\medium.png \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\maps\small.png \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\plugins\org.apache.cordova.device-motion \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\plugins\org.apache.cordova.file \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\plugins\org.apache.cordova.media \
@@ -882,6 +890,10 @@ Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\res\screen\ios\scre
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\res\screen\tizen\README.md \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\res\screen\webos\screen-64.png \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\res\screen\windows-phone\screen-portrait.jpg \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\skins\brushed.png \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\skins\finish.png \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\skins\kitty.png \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\skins\skulls.png \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\spec\helper.js \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\spec\index.js \
 Z:\Documents\GitHub\LabyrintApp\platforms\android\assets\www\spec\lib \
