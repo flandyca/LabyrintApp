@@ -18,7 +18,7 @@
 		var speedY = 0;
 		var speedUnit = 0.2;
 		var maxSpeed = 5;
-		var bounceSensitivity = 0.2;
+		var bounceSensitivity = speedUnit + 0.01;
 		var bounceSpeedDimish = -0.4;
 		
 		//Ball definitions
@@ -110,7 +110,9 @@
 		//Draw the maze background
 		drawMaze("maps/"+mazeName+".png");
 				
-        startWatch();
+		//Timeout for 2 seconds (let map load)		
+		
+        window.setTimeout(startWatch(), 2000);
     }
 
 	//Drawing the maze
@@ -237,6 +239,8 @@
 	
 	function checkCollision(){		
 		
+		var collision = false;
+		
 		//LEFT
 		if(speedX < 0){
 			if(checkColor(ballLeft-(speedX*-1), ballTop+(ballRadius/2), (speedX*-1), ballRadius)){
@@ -246,6 +250,7 @@
 				else{
 					speedX = 0;
 				}
+				collision = true;
 			}
 		}
 		//RIGHT
@@ -257,6 +262,7 @@
 				else{
 					speedX = 0;
 				}
+				collision = true;
 			}
 		}
 		//TOP
@@ -268,6 +274,7 @@
 				else{
 					speedY = 0;
 				}
+				collision = true;
 			}
 		}
 		//BOTTOM
@@ -279,39 +286,42 @@
 				else{
 					speedY = 0;
 				}
+				collision = true;
 			}
 		}	
 		
-		//TOP-LEFT
-		if(speedX <= 0 && speedY <= 0){
-			if(checkColor(ballLeft-(speedX*-1), ballTop-(speedY*-1), (speedX*-1)+(ballRadius/2), (speedY*-1)+(ballRadius/2))){
-				//window.alert("TOP-LEFT");
-				speedY = speedY * -1;
-				speedX = speedX * -1;
+		if(collision == false){		
+			//TOP-LEFT
+			if(speedX <= 0 && speedY <= 0){
+				if(checkColor(ballLeft-(speedX*-1), ballTop-(speedY*-1), (speedX*-1)+(ballRadius/2), (speedY*-1)+(ballRadius/2))){
+					//window.alert("TOP-LEFT");
+					speedY = speedY * -1;
+					speedX = speedX * -1;
+				}
 			}
-		}
-		//BOTTOM-LEFT
-		else if(speedX <= 0 && speedY >= 0){
-			if(checkColor(ballLeft-(speedX*-1), ballBottom-(ballRadius/2), (speedX*-1)+(ballRadius/2), speedY+(ballRadius/2))){
-				//window.alert("BOTTOM-LEFT");
-				speedY = speedY * -1;
-				speedX = speedX * -1;
-			}		
-		}
-		//TOP-RIGHT
-		else if(speedX >= 0 && speedY <= 0){
-			if(checkColor(ballRight-(ballRadius/2), ballTop-(speedY*-1), speedX+(ballRadius/2), (speedY*-1)+(ballRadius/2))){
-				//window.alert("TOP-RIGHT");
-				speedY = speedY * -1;
-				speedX = speedX * -1;
+			//BOTTOM-LEFT
+			else if(speedX <= 0 && speedY >= 0){
+				if(checkColor(ballLeft-(speedX*-1), ballBottom-(ballRadius/2), (speedX*-1)+(ballRadius/2), speedY+(ballRadius/2))){
+					//window.alert("BOTTOM-LEFT");
+					speedY = speedY * -1;
+					speedX = speedX * -1;
+				}		
 			}
-		}
-		//BOTTOM-RIGHT
-		else if(speedX >= 0 && speedY >= 0){
-			if(checkColor(ballRight-(ballRadius/2), ballBottom-(ballRadius/2), speedX+(ballRadius/2), speedY+(ballRadius/2))){
-				//window.alert("BOTTOM-RIGHT");
-				speedY = speedY * -1;
-				speedX = speedX * -1;
+			//TOP-RIGHT
+			else if(speedX >= 0 && speedY <= 0){
+				if(checkColor(ballRight-(ballRadius/2), ballTop-(speedY*-1), speedX+(ballRadius/2), (speedY*-1)+(ballRadius/2))){
+					//window.alert("TOP-RIGHT");
+					speedY = speedY * -1;
+					speedX = speedX * -1;
+				}
+			}
+			//BOTTOM-RIGHT
+			else if(speedX >= 0 && speedY >= 0){
+				if(checkColor(ballRight-(ballRadius/2), ballBottom-(ballRadius/2), speedX+(ballRadius/2), speedY+(ballRadius/2))){
+					//window.alert("BOTTOM-RIGHT");
+					speedY = speedY * -1;
+					speedX = speedX * -1;
+				}
 			}
 		}
 		
