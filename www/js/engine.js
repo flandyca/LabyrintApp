@@ -54,7 +54,11 @@
 	function pickMaze() {
 	
 		//Pick maze at random
+<<<<<<< HEAD
 		if(localStorage.size == "random" || localStorage.size == "undefined"){
+=======
+		if(localStorage.size == "random"){
+>>>>>>> origin/develop
 			window.alert("Picking random maze");
 			var randomNr = randomInt(1,3);
 		}
