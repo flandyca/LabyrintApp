@@ -350,7 +350,7 @@
 			//Look for Red
 			if (red > 200 && green == 0 && blue == 0){
 				Goal();
-				SoundFinish
+				SoundFinish();
 				return;
 			}
 			//Look for Green
@@ -359,7 +359,7 @@
 			}
 			//Look for Blue
 			if (red == 0 && green == 0 && blue > 200){
-				SoundToken
+				SoundToken();
 				return;
 			}
 		}		
