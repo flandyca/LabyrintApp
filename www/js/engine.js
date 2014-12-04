@@ -362,12 +362,27 @@
     }
 	
 	//Play mp3 file
+	//function SoundCollision() {
+	//var audio = new Audio('/android_asset/www/punch.ogg');
+	// 0735.ogg was downloaded from: http://www.bigsoundbank.com/sound-0735-water-drum-1.html made by faeli83
+	// punch.mp3 (also converted to ogg) was downloaded from: http://soundbible.com/2069-Realistic-Punch.html made by Mark DiAngelo
+	//audio.play();
+	//}
+	
 	function SoundCollision() {
-	var audio = new Audio('punch.mp3');
-	// punch.mp3 was downloaded from: http://soundbible.com/2069-Realistic-Punch.html made by Mark DiAngelo
-	audio.play();
+	soundfile = new Media("/android_asset/www/punch.ogg",
+	// punch.mp3 (also converted to ogg) was downloaded from: http://soundbible.com/2069-Realistic-Punch.html made by Mark DiAngelo
+        function() {
+            alert("playAudio():Audio Success");
+			//alert on succes
+        },
+            function(err) {
+                alert(err);
+				//alert on error
+        }
+        );
+      soundfile.play();
 	}
-
 	//Testbutton in game.html
 	function buttonClicked()
 	{
