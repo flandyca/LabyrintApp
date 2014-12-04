@@ -350,10 +350,16 @@
 			//Look for Red
 			if (red > 200 && green == 0 && blue == 0){
 				Goal();
+				SoundFinish
 				return;
 			}
 			//Look for Green
 			if (red == 0 && green > 180 && blue == 0){
+				return;
+			}
+			//Look for Blue
+			if (red == 0 && green == 0 && blue > 200){
+				SoundToken
 				return;
 			}
 		}		
@@ -382,6 +388,35 @@
 	
 	function SoundCollision() {
 	soundfile = new Media("/android_asset/www/punch.ogg",
+	// punch.mp3 (also converted to ogg) was downloaded from: http://soundbible.com/2069-Realistic-Punch.html made by Mark DiAngelo
+        function() {
+            //alert("playAudio():Audio Success");
+			//alert on succes
+        },
+            function(err) {
+                alert(err);
+				//alert on error
+        }
+        );
+      soundfile.play();
+	}
+			function SoundToken() {
+	soundfile = new Media("/android_asset/www/mirror.ogg",
+	// punch.mp3 (also converted to ogg) was downloaded from: http://soundbible.com/2069-Realistic-Punch.html made by Mark DiAngelo
+        function() {
+            //alert("playAudio():Audio Success");
+			//alert on succes
+        },
+            function(err) {
+                alert(err);
+				//alert on error
+        }
+        );
+      soundfile.play();
+	}
+	
+		function SoundFinish() {
+	soundfile = new Media("/android_asset/www/chains.ogg",
 	// punch.mp3 (also converted to ogg) was downloaded from: http://soundbible.com/2069-Realistic-Punch.html made by Mark DiAngelo
         function() {
             //alert("playAudio():Audio Success");
