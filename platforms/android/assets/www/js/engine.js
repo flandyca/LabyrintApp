@@ -54,7 +54,7 @@
 	function pickMaze() {
 	
 		//Pick maze at random
-		if(localStorage.size == "random"){
+		if(localStorage.size == "random" || localStorage.size == "undefined"){
 			window.alert("Picking random maze");
 			var randomNr = randomInt(1,3);
 		}
@@ -112,7 +112,7 @@
 				
 		//Timeout for 2 seconds (let map load)		
 		
-        window.setTimeout(startWatch(), 2000);
+        window.setTimeout(startWatch(), 5000);
     }
 
 	//Drawing the maze
@@ -342,7 +342,7 @@
 			//Look for black
 			if (red == 0 && green == 0 && blue == 0){
 			//Play SoundCollision when colliding with black pixels
-				SoundCollision();
+				//SoundCollision();
 				return true;
 			}
 			
@@ -383,7 +383,7 @@
 	soundfile = new Media("/android_asset/www/punch.ogg",
 	// punch.mp3 (also converted to ogg) was downloaded from: http://soundbible.com/2069-Realistic-Punch.html made by Mark DiAngelo
         function() {
-            alert("playAudio():Audio Success");
+            //alert("playAudio():Audio Success");
 			//alert on succes
         },
             function(err) {
