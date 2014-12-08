@@ -3,6 +3,7 @@
 		var darknessCanvas;
 		var darknessContext;
 		var darkness = false;
+		var nightmare = false;
 		var tokenTimer = 0;
 		var tokenLightOn;
 		var tokenLightX = 0;
@@ -78,7 +79,11 @@
 		symbolsSetup();
 		
 		//Draw the maze background
-		window.setTimeout(drawMaze("maps/"+mazeName+".png"), 5000);	
+		window.setTimeout(function(){drawMaze("maps/"+mazeName+".png");}, 2000);
+		if(nightmare){
+			window.setTimeout(function(){setDarkness();}, 3000);
+			//setDarkness();
+		}
 		startWatch();
 		
     }
@@ -208,9 +213,11 @@
 		//DARKMODES, draw new ball, light and tokenlight
 		if(darkness){
 			drawCircle(ballLeft, ballTop);
-			lightUp(ballLeft, ballTop);
-			if(tokenLightOn == true){
-				tokenLightUp();
+			if(nightmare == false){
+				lightUp(ballLeft, ballTop);
+				if(tokenLightOn == true){
+					tokenLightUp();
+				}
 			}
 		}
 		
@@ -392,11 +399,15 @@
 		else if(randomNr==2 || lsMode=="trace"){
 			setDarkness();
 			darkness = true;
-		}
-		
+		}		
 		else if(randomNr==3 || lsMode=="glowing"){
 			setDarkness();
 			darkness = true;
+		}		
+		else if(randomNr==4 || lsMode=="dark"){
+			darkness = true;
+			nightmare = true;
+			
 		}
 		
 		if(darkness){
@@ -430,9 +441,8 @@
 					break;
 				}
 			}
-		}
-		
-		window.alert("Tokens found: "+tokens);
+		}		
+		//window.alert("Tokens found: "+tokens);
 	}
 	
 
@@ -562,7 +572,7 @@
 	}		
 	
 	function clearBall(x,y){
-		symbolsContext.clearRect(x, y, ballSize, ballSize);
+		symbolsContext.clearRect(x-5, y-5, ballSize+10, ballSize+10);
 	}
 	
 	function drawCircle(x,y){

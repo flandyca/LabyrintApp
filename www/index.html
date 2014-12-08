@@ -85,6 +85,9 @@
 			else if(m == "glowing"){
 				$('#radioMode :radio:eq(3)').attr("checked", "checked");	
 			}
+			else if(m == "dark"){
+				$('#radioMode :radio:eq(4)').attr("checked", "checked");	
+			}
 
 			//Check selected COLOR
 			if(c == "red"){
@@ -165,7 +168,10 @@
      	<label for="radioMode-3">Ball leaves trace</label>
 
      	<input type="radio" name="radioMode" id="radioMode-4" value="glowing"  />
-     	<label for="radioMode-4">Glowing ball</label>
+     	<label for="radioMode-4">Glowing ball</label>		
+
+     	<input type="radio" name="radioMode" id="radioMode-5" value="dark"  />
+     	<label for="radioMode-5">Nightmare</label>
 
 </fieldset>
 <fieldset data-role="controlgroup" id="radioColor">
