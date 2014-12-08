@@ -350,10 +350,12 @@
 			//Look for Blue
 			if (red == 0 && green == 0 && blue > 200){
 				SoundToken();
-				tokenTimer = 0;
-				tokenLightOn = true;
-				tokenLightX = ballLeft + ballRadius;				
-				tokenLightY = ballTop + ballRadius;
+				if(nightmare == false){
+					tokenTimer = 0;
+					tokenLightOn = true;
+					tokenLightX = ballLeft + ballRadius;				
+					tokenLightY = ballTop + ballRadius;
+				}
 				return;
 				
 			}
