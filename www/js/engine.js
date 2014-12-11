@@ -11,6 +11,8 @@
 		var tokenLightTime = 150;
 		var tokenFinder = true;
 		
+		var worker = new Worker('refreshDarkness.js');
+		
 		var symbolsCanvas;
 		var symbolsContext;
 		
@@ -28,7 +30,7 @@
 		var speedY = 0;
 		var speedUnit = 0.2;
 		var maxSpeed = 3;
-		var bounceSensitivity = speedUnit + 0.01;
+		var bounceSensitivity = speedUnit + (speedUnit * 0.01);
 		var bounceSpeedDimish = -0.4;
 		
 		//Ball definitions
@@ -59,42 +61,40 @@
 	
     // Cordova is ready
     //	
-    function onDeviceReady() {
-		
+    function onDeviceReady() {		
 		//Load from settings
 		pickMaze();		
-		pickMode();
+		pickMode();		
 		
-		//Set up the canvas
-		canvas = document.getElementById("canvas");
-		context = canvas.getContext("2d");
-				
+		//Background map setup		
+		mapSetup("maps/"+mazeName+".png");		
+		
 		//Graphical skin layer setup
 		skinSetup();
 		
-		//BALL SETUP, ballSize as parameter
-		ballSetup(12);
-
 		//Symbol layer setup
 		symbolsSetup();
 		
-		//Draw the maze background
-		window.setTimeout(function(){drawMaze("maps/"+mazeName+".png");}, 2000);
+		//BALL SETUP, ballSize as parameter
+		ballSetup(12);
+		
+		//Show map for 3 seconds if nightmare -gamemode is selected
 		if(nightmare){
 			window.setTimeout(function(){setDarkness();}, 3000);
 		}
+		window.setTimeout(function(){findTokens();}, 1000);
 		startWatch();
-		
     }
 
 	//Drawing the maze
-	function drawMaze(mazeFile){
+	function mapSetup(mazeFile){
+		//Set up the canvas
 		var imgMaze = new Image();
-		imgMaze.onload = function() {
-			//Resize the canvas to match the mace picture
+		imgMaze.onload = function() {	
+			canvas = document.getElementById("canvas");
+			context = canvas.getContext("2d");	
 			canvas.width = windowWidth;
-			canvas.height = windowHeight;
-			
+			canvas.height = windowHeight;	
 			//Draw the maze
 			context.drawImage(imgMaze, ((windowWidth/2)-(windowHeight/2)),0, windowHeight, windowHeight);		
 		}
@@ -151,11 +151,14 @@
 		}
 		//SLOW DOWN, accX is NEUTRAL
 		else{
-			if(speedX > 0){
+			if(speedX > speedUnit){
 				speedX += -speedUnit/2;
 			}
-			else if(speedX < 0){
+			else if(speedX < -speedUnit){
 				speedX += speedUnit/2;
+			}
+			else{
+				speedX = 0;
 			}
 		}
 		//MOVE DOWNWARDS, accY is POSITIVE
@@ -182,22 +185,27 @@
 		}
 		//SLOW DOWN, accY is NEUTRAL
 		else{
-			if(speedY > 0){
+			if(speedY > speedUnit){
 				speedY += -speedUnit/2;
 			}
-			else if(speedY < 0){
+			else if(speedY < -speedUnit){
 				speedY += speedUnit/2;
+			}
+			else{
+				speedY = 0;
 			}
 		}
 			
 		//ALL MODES, check for collision
-		checkCollision();	
-
+		checkCollision();
 		//VISIBLE MODE, animate ball movement
 		if(!darkness){
 			ball.velocity({top:"+="+speedY, left:"+="+speedX}, {duration: 0.1});
 		}
-		
+		else{
+			clearBall(ballLeft,ballTop);
+		}
+				
 		//DARKMODES, clear old ball
 		if(darkness){
 			clearBall(ballLeft,ballTop);
@@ -209,6 +217,7 @@
 		ballTop += speedY;
 		ballBottom = ballTop + ballSize;
 		
+		
 		//DARKMODES, draw new ball, light and tokenlight
 		if(darkness){
 			drawCircle(ballLeft, ballTop);
@@ -218,11 +227,6 @@
 					tokenLightUp();
 				}
 			}
-		}
-		
-		if(tokenFinder){
-			findTokens();
-			tokenFinder = false;
 		}
     }
 	
@@ -338,17 +342,17 @@
 			}
 			
 			//Look for Red
-			if (red > 200 && green == 0 && blue == 0){
+			else if (red > 200 && green == 0 && blue == 0){
 				SoundFinish();
 				Goal();
 				return;
 			}
 			//Look for Green
-			if (red == 0 && green > 180 && blue == 0){
+			else if (red == 0 && green > 180 && blue == 0){
 				return;
 			}
 			//Look for Blue
-			if (red == 0 && green == 0 && blue > 200){
+			else if (red == 0 && green == 0 && blue > 200){
 				SoundToken();
 				if(nightmare == false){
 					tokenTimer = 0;
@@ -419,34 +423,82 @@
 	}
 	
 	
-	function findTokens(){
+	function findTokens(){		
+		window.alert("Loading...");
 		var tokens = 0;
-		var ftX;
-		var ftY = 0;
+		var ftX = ((windowWidth/2)-(windowHeight/2));
 		var ftWidth = (windowHeight/18);
-		var ftHeight = windowHeight;
-		for(var j = 0; j < 18; j += 1){
-			ftX = (((windowWidth/2)-(windowHeight/2)) + (ftWidth * j));
-			var imgData = context.getImageData(ftX, ftY, (ftWidth*0.8), ftHeight);
-			var pixels = imgData.data;
-			for (var i = 0; n = pixels.length, i < n; i += 4) {
-				var red = pixels[i];
-				var green = pixels[i+1];
-				var blue = pixels[i+2];
-				var alpha = pixels[i+3];
-				
-				//Look for Blue
-				if (red == 0 && green == 0 && blue > 200){
-					//SoundToken();
-					tokens += 1;
-					break;
+		//var ftHeight = (windowHeight/18);
+		
+		//X
+		for(var j = ftX; j < (ftX+windowHeight); j += 1){
+			//Y
+			for(var k = 1; k < windowHeight; k += 1){
+				var imgData = context.getImageData(j, k, 1, 1);
+				var pixels = imgData.data;
+				for (var i = 0; n = pixels.length, i < n; i += 4) {
+					var red = pixels[i];
+					var green = pixels[i+1];
+					var blue = pixels[i+2];
+					var alpha = pixels[i+3];
+					
+					//Look for Blue
+					if (red == 0 && green == 0 && blue > 200){
+						//SoundToken();
+						tokens += 1;
+						//window.alert("Loading token at: "+j+" - "+k);
+						loadSymbol(j,k,"token");
+						j += ftWidth;
+						break;
+					}
 				}
 			}
-		}		
-		//window.alert("Tokens found: "+tokens);
+		}
+		
+		findFinish();
+		window.alert("Tokens found: "+tokens);
 	}
 	
-
+	function findFinish(){
+	
+		var fnX = ((windowWidth/2)-(windowHeight/2));
+		var fnWidth = (windowHeight/18);
+		//var ftHeight = (windowHeight/18);
+		
+		//X
+		for(var j = (fnX+windowHeight); j > fnX; j -= 1){
+			//Y
+			for(var k = 1; k < windowHeight; k += 1){
+				var imgData = context.getImageData(j, k, 1, 1);
+				var pixels = imgData.data;
+				for (var i = 0; n = pixels.length, i < n; i += 4) {
+					var red = pixels[i];
+					var green = pixels[i+1];
+					var blue = pixels[i+2];
+					var alpha = pixels[i+3];
+					
+					//Look for Red
+					if (red > 200 && green == 0 && blue == 0){
+						loadSymbol(j-15,k-15,"finish");
+						j = fnX;
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	
+	
+	function loadSymbol(x,y,name){
+		var r = 15;
+		var $img = $('<img>', { src: "skins/"+name+".png" });
+		$img.load(function(){
+			symbolsContext.drawImage(this, x, y, r, r);
+		});	
+		//window.alert("Token loaded at: "+x+" - "+y);
+	}
+	
     // onError: Failed to get the acceleration
     //
     function onError() {
@@ -459,6 +511,136 @@
 		window.alert("You win!");
     	window.location.reload();
     }
+		
+	function setDarkness(){
+		//Set up the darknessCanvas
+		darknessCanvas = document.getElementById("darkness");
+		darknessContext = darknessCanvas.getContext("2d");
+		darknessCanvas.width = windowWidth;
+		darknessCanvas.height = windowHeight;
+		darknessCanvas.style.top = "0px";
+		darknessCanvas.style.left = "0px";
+		darknessContext.globalAlpha = 1;
+		darknessContext.fillStyle = "rgb(0, 0, 0)";
+		darknessContext.fillRect(((windowWidth/2)-(windowHeight/2)),0, windowHeight, windowHeight);
+		darknessContext.globalCompositeOperation = "destination-out";	
+	}
+	
+	function lightUp(x,y){
+		if(lsMode=="glowing"){
+			setDarkness();
+		}
+		x = x + ballRadius;
+		y = y + ballRadius;
+		var grd = darknessContext.createRadialGradient(x,y,1,x,y,25);
+		
+		/*grd.addColorStop(0, "transparent");
+		grd.addColorStop(0.3, "rgba(255,255,255,.6)"); 
+		grd.addColorStop(0.7, "rgba(255,255,255,.6)"); 
+		grd.addColorStop(1, "transparent"); */
+		grd.addColorStop(0, "rgba(255,255,255, 1)");
+		grd.addColorStop(0.6, "rgba(255,255,255, 1)");
+		grd.addColorStop(1, "transparent");
+		
+		darknessContext.fillStyle = grd;
+		darknessContext.fillRect(0,0,windowWidth,windowHeight);
+	}
+		
+	function tokenLightUp(){
+		//document.getElementById('test').innerHTML = tokenTimer;
+		tokenTimer += 1;
+		x = tokenLightX;
+		y = tokenLightY;
+		var grd = darknessContext.createRadialGradient(x,y,1,x,y,90);
+		
+		grd.addColorStop(0, "rgba(255,255,255, 1)");
+		grd.addColorStop(0.6, "rgba(255,255,255, 1)");
+		grd.addColorStop(1, "transparent");
+		
+		darknessContext.fillStyle = grd;
+		darknessContext.fillRect(0,0,windowWidth,windowHeight);
+		
+		if(tokenTimer >= tokenLightTime){
+			tokenLightOn = false;
+			tokenTimer = 0;
+		}
+	}		
+	
+	function clearBall(x,y){
+		bCtx.clearRect(x-5, y-5, ballSize+10, ballSize+10);
+	}
+	
+	function drawCircle(x,y){
+		x = x + ballRadius;
+		y = y + ballRadius;
+		//bCtx.clearRect(((windowWidth/2)-(windowHeight/2)),0, windowHeight, windowHeight);
+		bCtx.beginPath();
+		bCtx.arc(x,y, ballRadius, 0, Math.PI * 2, false);
+		bCtx.closePath();
+		if(lsColor == "undefined"){
+			bCtx.fillStyle = "red";
+		}
+		else{
+			bCtx.fillStyle = lsColor;
+		}
+		bCtx.fill();
+	}
+	
+	function ballSetup(size){
+		bCan = document.getElementById("cBall");
+		bCtx = bCan.getContext("2d");
+		bCan.width = windowWidth;
+		bCan.height = windowHeight;
+		bCan.style.top = "0px";
+		bCan.style.left = "0px";
+		
+		//BALL DEFINITIONS
+		var bs = document.getElementById('ball');
+		//var size = "12";
+		var startLeft = ((windowWidth/2)-(windowHeight/2)) + 10;
+		var startTop = 10;		
+				
+		//BALL SETUP
+		bs.style.left = startLeft + 'px';
+		bs.style.Top = startTop + 'px';
+		bs.style.width = size + 'px';
+		bs.style.height = size + 'px';
+		bs.style.backgroundColor = lsColor;		
+		
+		//FETCH VALUES
+		ball = $("#ball");		
+		ballSize = ball.height();
+		ballRadius = ballSize/2;		
+		ballPosition = ball.position();
+		ballLeft = ballPosition.left;
+		ballRight = ballPosition.left + ballSize;
+		ballTop = ballPosition.top;
+		ballBottom = ballPosition.top + ballSize;
+
+	}
+	
+	function symbolsSetup(){
+		//SETUP SYMBOLS LAYER FOR ICONS (BALL, TOKENS..)
+		symbolsCanvas = document.getElementById("symbols");
+		symbolsContext = symbolsCanvas.getContext("2d");
+		symbolsCanvas.width = windowWidth;
+		symbolsCanvas.height = windowHeight;
+		symbolsCanvas.style.top = "0px";
+		symbolsCanvas.style.left = "0px";	
+	}
+	
+	function skinSetup(){
+	//SKIN DEFINITIONS
+		var skinSetup = document.getElementById('skin');
+		var skinSize = windowHeight;
+		var skinLeft = (windowWidth/2)-(windowHeight/2);
+		
+		//SKIN SETUP
+		skinSetup.style.left = skinLeft + 'px';
+		skinSetup.style.width = skinSize + 'px';
+		skinSetup.style.height = skinSize + 'px';
+		skinSetup.src = 'skins/'+skinName+'.png';
+	}
 	
 	//Play mp3 file
 	//function SoundCollision() {
@@ -517,127 +699,5 @@
 	SoundCollision();
 	}
 	
-	
-	function setDarkness(){
-		//Set up the darknessCanvas
-		darknessCanvas = document.getElementById("darkness");
-		darknessContext = darknessCanvas.getContext("2d");
-		darknessCanvas.width = windowWidth;
-		darknessCanvas.height = windowHeight;
-		darknessCanvas.style.top = "0px";
-		darknessCanvas.style.left = "0px";
-		darknessContext.globalAlpha = 1;
-		darknessContext.fillStyle = "rgb(0, 0, 0)";
-		darknessContext.fillRect(((windowWidth/2)-(windowHeight/2)),0, windowHeight, windowHeight);
-		darknessContext.globalCompositeOperation = "destination-out";	
-	}
-	
-	function lightUp(x,y){
-		if(lsMode=="glowing"){
-			setDarkness();
-		}
-		x = x + ballRadius;
-		y = y + ballRadius;
-		var grd = darknessContext.createRadialGradient(x,y,1,x,y,25);
-		
-		/*grd.addColorStop(0, "transparent");
-		grd.addColorStop(0.3, "rgba(255,255,255,.6)"); 
-		grd.addColorStop(0.7, "rgba(255,255,255,.6)"); 
-		grd.addColorStop(1, "transparent"); */
-		grd.addColorStop(0, "rgba(255,255,255, 1)");
-		grd.addColorStop(0.6, "rgba(255,255,255, 1)");
-		grd.addColorStop(1, "transparent");
-		
-		darknessContext.fillStyle = grd;
-		darknessContext.fillRect(0,0,windowWidth,windowHeight);
-	}
-		
-	function tokenLightUp(){
-		//document.getElementById('test').innerHTML = tokenTimer;
-		tokenTimer += 1;
-		x = tokenLightX;
-		y = tokenLightY;
-		var grd = darknessContext.createRadialGradient(x,y,1,x,y,90);
-		
-		grd.addColorStop(0, "rgba(255,255,255, 1)");
-		grd.addColorStop(0.6, "rgba(255,255,255, 1)");
-		grd.addColorStop(1, "transparent");
-		
-		darknessContext.fillStyle = grd;
-		darknessContext.fillRect(0,0,windowWidth,windowHeight);
-		
-		if(tokenTimer >= tokenLightTime){
-			tokenLightOn = false;
-			tokenTimer = 0;
-		}
-	}		
-	
-	function clearBall(x,y){
-		symbolsContext.clearRect(x-5, y-5, ballSize+10, ballSize+10);
-	}
-	
-	function drawCircle(x,y){
-		x = x + ballRadius;
-		y = y + ballRadius;
-		//symbolsContext.clearRect(((windowWidth/2)-(windowHeight/2)),0, windowHeight, windowHeight);
-		symbolsContext.beginPath();
-		symbolsContext.arc(x,y, ballRadius, 0, Math.PI * 2, false);
-		symbolsContext.closePath();
-		if(lsColor == "undefined"){
-			symbolsContext.fillStyle = "red";
-		}
-		else{
-			symbolsContext.fillStyle = lsColor;
-		}
-		symbolsContext.fill();
-	}
-	
-	function ballSetup(size){
-		//BALL DEFINITIONS
-		var bs = document.getElementById('ball');
-		//var size = "12";
-		var startLeft = ((windowWidth/2)-(windowHeight/2)) + 10;
-		var startTop = 10;		
-				
-		//BALL SETUP
-		bs.style.left = startLeft + 'px';
-		bs.style.Top = startTop + 'px';
-		bs.style.width = size + 'px';
-		bs.style.height = size + 'px';
-		bs.style.backgroundColor = lsColor;		
-		
-		//FETCH VALUES
-		ball = $("#ball");		
-		ballSize = ball.height();
-		ballRadius = ballSize/2;		
-		ballPosition = ball.position();
-		ballLeft = ballPosition.left;
-		ballRight = ballPosition.left + ballSize;
-		ballTop = ballPosition.top;
-		ballBottom = ballPosition.top + ballSize;		
-	}
-	
-	function symbolsSetup(){
-		//SETUP SYMBOLS LAYER FOR ICONS (BALL, TOKENS..)
-		symbolsCanvas = document.getElementById("symbols");
-		symbolsContext = symbolsCanvas.getContext("2d");
-		symbolsCanvas.width = windowWidth;
-		symbolsCanvas.height = windowHeight;
-		symbolsCanvas.style.top = "0px";
-		symbolsCanvas.style.left = "0px";	
-	}
-	
-	function skinSetup(){
-	//SKIN DEFINITIONS
-		var skinSetup = document.getElementById('skin');
-		var skinSize = windowHeight;
-		var skinLeft = (windowWidth/2)-(windowHeight/2);
-		
-		//SKIN SETUP
-		skinSetup.style.left = skinLeft + 'px';
-		skinSetup.style.width = skinSize + 'px';
-		skinSetup.style.height = skinSize + 'px';
-		skinSetup.src = 'skins/'+skinName+'.png';
-	}
 	
 
