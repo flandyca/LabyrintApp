@@ -62,44 +62,32 @@
     // Cordova is ready
     //	
     function onDeviceReady() {		
-		//Load from settings
+		//Load game mode and map based on settings
 		pickMaze();		
 		pickMode();		
 		
-		//Background map setup		
+		//Background (that is used for collision detection) map set up		
 		mapSetup("maps/"+mazeName+".png");		
 		
-		//Graphical skin layer setup
+		//Graphical skin layer set up
 		skinSetup();
 		
-		//Symbol layer setup
+		//Symbol layer set up
 		symbolsSetup();
 		
 		//BALL SETUP, ballSize as parameter
 		ballSetup(12);
 		
-		//Show map for 3 seconds if nightmare -gamemode is selected
+		//Load token skins to symbolcanvas
+		window.setTimeout(function(){findTokens();}, 1000);
+		
+		//Show map for 3 seconds if nightmare -game mode is selected
 		if(nightmare){
 			window.setTimeout(function(){setDarkness();}, 3000);
 		}
-		window.setTimeout(function(){findTokens();}, 1000);
 		startWatch();
     }
 
-	//Drawing the maze
-	function mapSetup(mazeFile){
-		//Set up the canvas
-		var imgMaze = new Image();
-		imgMaze.onload = function() {	
-			canvas = document.getElementById("canvas");
-			context = canvas.getContext("2d");	
-			canvas.width = windowWidth;
-			canvas.height = windowHeight;	
-			//Draw the maze
-			context.drawImage(imgMaze, ((windowWidth/2)-(windowHeight/2)),0, windowHeight, windowHeight);		
-		}
-		imgMaze.src = mazeFile;
-	}
     // Start watching the acceleration
     //
     function startWatch() {
@@ -127,6 +115,40 @@
 		accX = acceleration.y;
 		accY = acceleration.x;
 		
+		//UPDATES speed variables based on acceleration
+		updateMovement();
+			
+		//ALL MODES, check for collision
+		checkCollision();		
+		
+		//VISIBLE MODE, animate ball movement
+		if(!darkness){
+			ball.velocity({top:"+="+speedY, left:"+="+speedX}, {duration: 0.1});
+		}
+		//DARKMODES, clear old ball
+		else{
+			clearBall(ballLeft,ballTop);
+		}
+		
+		//ALL MODES, update position variables based on speed
+		ballLeft += speedX;
+		ballRight = ballLeft + ballSize;
+		ballTop += speedY;
+		ballBottom = ballTop + ballSize;		
+		
+		//DARKMODES, draw new ball, light and tokenlight
+		if(darkness){
+			drawCircle(ballLeft, ballTop);
+			if(nightmare == false){
+				lightUp(ballLeft, ballTop);
+				if(tokenLightOn == true){
+					tokenLightUp();
+				}
+			}
+		}
+    }
+	
+	function updateMovement(){
 		//MOVE TO RIGHT, accX is POSITIVE
 		if(accX > 1){
 			if(speedX <= maxSpeed){
@@ -194,42 +216,8 @@
 			else{
 				speedY = 0;
 			}
-		}
-			
-		//ALL MODES, check for collision
-		checkCollision();
-		//VISIBLE MODE, animate ball movement
-		if(!darkness){
-			ball.velocity({top:"+="+speedY, left:"+="+speedX}, {duration: 0.1});
-		}
-		else{
-			clearBall(ballLeft,ballTop);
-		}
-				
-		//DARKMODES, clear old ball
-		if(darkness){
-			clearBall(ballLeft,ballTop);
-		}
-		
-		//ALL MODES, update position variables
-		ballLeft += speedX;
-		ballRight = ballLeft + ballSize;
-		ballTop += speedY;
-		ballBottom = ballTop + ballSize;
-		
-		
-		//DARKMODES, draw new ball, light and tokenlight
-		if(darkness){
-			drawCircle(ballLeft, ballTop);
-			if(nightmare == false){
-				lightUp(ballLeft, ballTop);
-				if(tokenLightOn == true){
-					tokenLightUp();
-				}
-			}
-		}
-    }
-	
+		}	
+	}
 	
 	
 	function checkCollision(){		
@@ -422,6 +410,76 @@
 	
 	}
 	
+	//Drawing the maze
+	function mapSetup(mazeFile){
+		//Set up the canvas
+		var imgMaze = new Image();
+		imgMaze.onload = function() {	
+			canvas = document.getElementById("canvas");
+			context = canvas.getContext("2d");	
+			canvas.width = windowWidth;
+			canvas.height = windowHeight;	
+			//Draw the maze
+			context.drawImage(imgMaze, ((windowWidth/2)-(windowHeight/2)),0, windowHeight, windowHeight);		
+		}
+		imgMaze.src = mazeFile;
+	}
+	
+	function ballSetup(size){
+		bCan = document.getElementById("cBall");
+		bCtx = bCan.getContext("2d");
+		bCan.width = windowWidth;
+		bCan.height = windowHeight;
+		bCan.style.top = "0px";
+		bCan.style.left = "0px";
+		
+		//BALL DEFINITIONS
+		var bs = document.getElementById('ball');
+		//var size = "12";
+		var startLeft = ((windowWidth/2)-(windowHeight/2)) + 10;
+		var startTop = 10;		
+				
+		//BALL SETUP
+		bs.style.left = startLeft + 'px';
+		bs.style.Top = startTop + 'px';
+		bs.style.width = size + 'px';
+		bs.style.height = size + 'px';
+		bs.style.backgroundColor = lsColor;		
+		
+		//FETCH VALUES
+		ball = $("#ball");		
+		ballSize = ball.height();
+		ballRadius = ballSize/2;		
+		ballPosition = ball.position();
+		ballLeft = ballPosition.left;
+		ballRight = ballPosition.left + ballSize;
+		ballTop = ballPosition.top;
+		ballBottom = ballPosition.top + ballSize;
+
+	}
+	
+	function symbolsSetup(){
+		//SETUP SYMBOLS LAYER FOR ICONS (BALL, TOKENS..)
+		symbolsCanvas = document.getElementById("symbols");
+		symbolsContext = symbolsCanvas.getContext("2d");
+		symbolsCanvas.width = windowWidth;
+		symbolsCanvas.height = windowHeight;
+		symbolsCanvas.style.top = "0px";
+		symbolsCanvas.style.left = "0px";	
+	}
+	
+	function skinSetup(){
+	//SKIN DEFINITIONS
+		var skinSetup = document.getElementById('skin');
+		var skinSize = windowHeight;
+		var skinLeft = (windowWidth/2)-(windowHeight/2);
+		
+		//SKIN SETUP
+		skinSetup.style.left = skinLeft + 'px';
+		skinSetup.style.width = skinSize + 'px';
+		skinSetup.style.height = skinSize + 'px';
+		skinSetup.src = 'skins/'+skinName+'.png';
+	}
 	
 	function findTokens(){		
 		window.alert("Loading...");
@@ -488,8 +546,6 @@
 		}
 	}
 	
-	
-	
 	function loadSymbol(x,y,name){
 		var r = 15;
 		var $img = $('<img>', { src: "skins/"+name+".png" });
@@ -534,10 +590,6 @@
 		y = y + ballRadius;
 		var grd = darknessContext.createRadialGradient(x,y,1,x,y,25);
 		
-		/*grd.addColorStop(0, "transparent");
-		grd.addColorStop(0.3, "rgba(255,255,255,.6)"); 
-		grd.addColorStop(0.7, "rgba(255,255,255,.6)"); 
-		grd.addColorStop(1, "transparent"); */
 		grd.addColorStop(0, "rgba(255,255,255, 1)");
 		grd.addColorStop(0.6, "rgba(255,255,255, 1)");
 		grd.addColorStop(1, "transparent");
@@ -585,63 +637,7 @@
 		}
 		bCtx.fill();
 	}
-	
-	function ballSetup(size){
-		bCan = document.getElementById("cBall");
-		bCtx = bCan.getContext("2d");
-		bCan.width = windowWidth;
-		bCan.height = windowHeight;
-		bCan.style.top = "0px";
-		bCan.style.left = "0px";
 		
-		//BALL DEFINITIONS
-		var bs = document.getElementById('ball');
-		//var size = "12";
-		var startLeft = ((windowWidth/2)-(windowHeight/2)) + 10;
-		var startTop = 10;		
-				
-		//BALL SETUP
-		bs.style.left = startLeft + 'px';
-		bs.style.Top = startTop + 'px';
-		bs.style.width = size + 'px';
-		bs.style.height = size + 'px';
-		bs.style.backgroundColor = lsColor;		
-		
-		//FETCH VALUES
-		ball = $("#ball");		
-		ballSize = ball.height();
-		ballRadius = ballSize/2;		
-		ballPosition = ball.position();
-		ballLeft = ballPosition.left;
-		ballRight = ballPosition.left + ballSize;
-		ballTop = ballPosition.top;
-		ballBottom = ballPosition.top + ballSize;
-
-	}
-	
-	function symbolsSetup(){
-		//SETUP SYMBOLS LAYER FOR ICONS (BALL, TOKENS..)
-		symbolsCanvas = document.getElementById("symbols");
-		symbolsContext = symbolsCanvas.getContext("2d");
-		symbolsCanvas.width = windowWidth;
-		symbolsCanvas.height = windowHeight;
-		symbolsCanvas.style.top = "0px";
-		symbolsCanvas.style.left = "0px";	
-	}
-	
-	function skinSetup(){
-	//SKIN DEFINITIONS
-		var skinSetup = document.getElementById('skin');
-		var skinSize = windowHeight;
-		var skinLeft = (windowWidth/2)-(windowHeight/2);
-		
-		//SKIN SETUP
-		skinSetup.style.left = skinLeft + 'px';
-		skinSetup.style.width = skinSize + 'px';
-		skinSetup.style.height = skinSize + 'px';
-		skinSetup.src = 'skins/'+skinName+'.png';
-	}
-	
 	//Play mp3 file
 	//function SoundCollision() {
 	//var audio = new Audio('/android_asset/www/punch.ogg');
