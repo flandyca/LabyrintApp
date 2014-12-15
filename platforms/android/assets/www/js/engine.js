@@ -18,6 +18,7 @@
 		timer: 0,
 		lightTime: 150,
 		lightOn: false,
+		lightRadius: 90,
 		x: 0,
 		y: 0
 	}
@@ -59,7 +60,7 @@
 	//Ball bounce definitions
 	var bounce = {
 		sensitivity: speed.unit * 1.01,
-		dimish: -0.4
+		dimish: -0.7
 	}
 	//Ball definitions
 	var ball = {
@@ -72,7 +73,8 @@
 		top: 0,
 		bottom: 0,
 		radius: 0,
-		size: 0
+		size: 0,
+		lightRadius: 25,
 	}
 	//Acceleration definitions
 	var acc = {
@@ -104,10 +106,6 @@
 		//BALL SETUP, ballSize as parameter
 		window.setTimeout(function(){ballSetup(12);}, 1000);
 		
-		//Show map for 3 seconds if nightmare -game mode is selected
-		if(mode.nightmare){
-			window.setTimeout(function(){setDarkness();}, 3000);
-		}
 		//Start accelerometer
 		startWatch();
     }
@@ -130,7 +128,6 @@
     // onSuccess: Get a snapshot of the current acceleration
 	// MAIN THREAD
     function onSuccess(acceleration) { 
-	
 		//Fetch ACCELERATION values, X=Y && Y=X due to forced landscape
 		acc.x = acceleration.y;
 		acc.y = acceleration.x;
@@ -173,7 +170,7 @@
 		//If darkness is true and nightmare is false, lightup ball and check if token should be lit
 		if(mode.darkness && mode.nightmare == false){
 			lightUp(ball.left, ball.top);
-			if(token.lightOn == true){
+			if(token.lightOn && settings.mode == "glowing"){
 				tokenLightUp();
 			}
 		}
@@ -374,26 +371,28 @@
 			
 			//WALL, look for black
 			if (red == 0 && green == 0 && blue == 0){
-			//Play SoundCollision when colliding with black pixels
-				//SoundCollision();
 				return true;
 			}			
 			//GOAL, look for red
 			else if (red > 200 && green == 0 && blue == 0){
 				SoundFinish();
 				Goal();
-				return;
+				break;
 			}
-			//TOKEN, look for Blue
-			else if (red == 0 && green == 0 && blue > 200){
+			//TOKEN, look for Blue, token.timer variable is there to avoid multiple hits
+			else if (red == 0 && green == 0 && blue > 200 && (token.timer > 20 || token.timer === 0)){
 				SoundToken();
-				if(mode.nightmare == false){
+				if(mode.darkness == true && mode.nightmare == false){
 					token.timer = 0;
 					token.lightOn = true;
 					token.x = ball.left + ball.radius;				
 					token.y = ball.top + ball.radius;
+					if(settings.mode == "glowing"){
+						repaintDarkness(token.x, token.y, token.lightRadius);
+					}
+					tokenLightUp();
 				}
-				return;				
+				return;			
 			}
 		}		
 		return false;
@@ -563,6 +562,10 @@
 		findStart();
 		findFinish();
 		window.alert("Tokens found: "+tokens);
+		//Show map for 3 seconds if nightmare -game mode is selected
+		if(mode.nightmare){
+			window.setTimeout(function(){setDarkness();}, 3000);
+		}
 	}
 	//Find start using checkColor
 	function findStart(){
@@ -594,8 +597,7 @@
 	}
 	//Find finish using checkColor
 	function findFinish(){
-		var x = gameboard.left;
-		
+		var x = gameboard.left;		
 		//X
 		for(var j = (gameboard.right); j > x; j -= 1){
 			//Y
@@ -640,44 +642,61 @@
 		darkness.c.height = windowHeight;
 		darkness.c.style.top = "0px";
 		darkness.c.style.left = "0px";
-		darkness.ctx.globalAlpha = 1;
+		darkness.ctx.globalAlpha = 1;		
 		darkness.ctx.fillStyle = "rgb(0, 0, 0)";
 		darkness.ctx.fillRect(gameboard.left,0, gameboard.width, gameboard.height);
 		darkness.ctx.globalCompositeOperation = "destination-out";	
 	}
+	function repaintDarkness(x,y,r){
+		r = r + 2;
+		darkness.ctx.globalCompositeOperation = "source-over";
+		darkness.ctx.arc(x,y,r, 0, Math.PI * 2, false);
+		darkness.ctx.closePath();	
+		darkness.ctx.fillStyle = "rgb(0, 0, 0)";
+		darkness.ctx.fill();	
+	}
 	//Lights up at coordinate
 	function lightUp(x,y){
-		if(settings.mode=="glowing"){
-			setDarkness();
-		}
 		x = x + ball.radius;
 		y = y + ball.radius;
-		var grd = darkness.ctx.createRadialGradient(x,y,1,x,y,25);
+		if(settings.mode=="glowing"){
+			repaintDarkness(x,y,ball.lightRadius);
+		}
+		var grd = darkness.ctx.createRadialGradient(x,y,1,x,y,ball.lightRadius);
 		
 		grd.addColorStop(0, "rgba(255,255,255, 1)");
 		grd.addColorStop(0.6, "rgba(255,255,255, 1)");
 		grd.addColorStop(1, "transparent");
 		
+		darkness.ctx.globalCompositeOperation = "destination-out";
+		darkness.ctx.beginPath();
+		darkness.ctx.arc(x,y,ball.lightRadius, 0, Math.PI * 2, false);
+		darkness.ctx.closePath();
 		darkness.ctx.fillStyle = grd;
-		darkness.ctx.fillRect(gameboard.left,0,gameboard.width, gameboard.height);
+		darkness.ctx.fill();
 	}
 	//Lights up token, triggered by checkColor->blue
 	function tokenLightUp(){
-		token.timer += 1;
 		x = token.x;
 		y = token.y;
-		var grd = darkness.ctx.createRadialGradient(x,y,1,x,y,90);
+		
+		var grd = darkness.ctx.createRadialGradient(x,y,1,x,y,token.lightRadius);
 		
 		grd.addColorStop(0, "rgba(255,255,255, 1)");
 		grd.addColorStop(0.6, "rgba(255,255,255, 1)");
 		grd.addColorStop(1, "transparent");
 		
+		darkness.ctx.globalCompositeOperation = "destination-out";
+		darkness.ctx.beginPath();
+		darkness.ctx.arc(x,y,token.lightRadius, 0, Math.PI * 2, false);
+		darkness.ctx.closePath();
 		darkness.ctx.fillStyle = grd;
-		darkness.ctx.fillRect(gameboard.left,0,gameboard.width, gameboard.height);
-		
+		darkness.ctx.fill();						
+		token.timer += 1;
 		if(token.timer >= token.lightTime){
 			token.lightOn = false;
 			token.timer = 0;
+			repaintDarkness(token.x, token.y, token.lightRadius);
 		}
 	}		
 	//clears old ball
