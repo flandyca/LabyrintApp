@@ -1,2 +1,2 @@
-/home/andreas/Labyrint/platforms/android/ant-build/AndroidManifest.xml : \
-/home/andreas/Labyrint/platforms/android/AndroidManifest.xml \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\ant-build\AndroidManifest.xml : \
+Z:\Documents\GitHub\LabyrintApp\platforms\android\AndroidManifest.xml \

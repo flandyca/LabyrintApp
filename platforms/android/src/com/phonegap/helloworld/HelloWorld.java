@@ -20,6 +20,7 @@
 package com.phonegap.helloworld;
 
 import android.os.Bundle;
+
 import org.apache.cordova.*;
 
 public class HelloWorld extends CordovaActivity
